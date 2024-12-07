@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBusTwin", "ServiceBusTwin\ServiceBusTwin.csproj", "{3329F306-288D-460E-AEF3-FE86F4557265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBusTwin.Tests", "ServiceBusTwin.Tests\ServiceBusTwin.Tests.csproj", "{BD486A96-1B83-46D6-A221-4B3BE0EEF0CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3329F306-288D-460E-AEF3-FE86F4557265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3329F306-288D-460E-AEF3-FE86F4557265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3329F306-288D-460E-AEF3-FE86F4557265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3329F306-288D-460E-AEF3-FE86F4557265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD486A96-1B83-46D6-A221-4B3BE0EEF0CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD486A96-1B83-46D6-A221-4B3BE0EEF0CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD486A96-1B83-46D6-A221-4B3BE0EEF0CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD486A96-1B83-46D6-A221-4B3BE0EEF0CF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
