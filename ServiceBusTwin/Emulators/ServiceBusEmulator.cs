@@ -4,9 +4,10 @@ internal sealed class ServiceBusEmulator : IEmulator
 {
     private readonly INetwork   _network;
     private readonly IContainer _sqlServer;
-    private readonly IContainer _serviceBus;
 
-    public ServiceBusEmulator(EmulatorConfiguration configuration)
+    public IContainer ServiceBus { get; }
+
+    public ServiceBusEmulator(ServiceBusEmulatorConfiguration configuration)
     {
         configuration.ConfigurationFile.SaveChanges(out var absoluteConfigPath);
 
@@ -24,11 +25,11 @@ internal sealed class ServiceBusEmulator : IEmulator
             .WithEnvironment("MSSQL_SA_PASSWORD", configuration.SqlSaPassword)
             .Build();
 
-        _serviceBus = new ContainerBuilder()
+        ServiceBus = new ContainerBuilder()
             .WithImage(configuration.SbEmulatorImage)
             .WithImagePullPolicy(PullPolicy.Always)
             .WithName(configuration.SbEmulatorName)
-            .WithPortBinding(5672, 5672)
+            .WithPortBinding(configuration.SbEmulatorPort)
             .WithNetwork(_network)
             .WithNetworkAliases(configuration.SbEmulatorName)
             .WithEnvironment("ACCEPT_EULA", "Y")
@@ -43,23 +44,26 @@ internal sealed class ServiceBusEmulator : IEmulator
             .Build();
     }
 
+    public string GetConnectionString() =>
+        $"Endpoint=sb://{ServiceBus.Hostname};SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;";
+
     public async Task StartAsync()
     {
         await _network.CreateAsync();
         await _sqlServer.StartAsync();
-        await _serviceBus.StartAsync();
+        await ServiceBus.StartAsync();
     }
 
     public async Task StopAsync()
     {
-        await _serviceBus.StopAsync();
+        await ServiceBus.StopAsync();
         await _sqlServer.StopAsync();
         await _network.DeleteAsync();
     }
 
     public async ValueTask DisposeAsync()
     {
-        await _serviceBus.DisposeAsync();
+        await ServiceBus.DisposeAsync();
         await _sqlServer.DisposeAsync();
         await _network.DisposeAsync();
     }

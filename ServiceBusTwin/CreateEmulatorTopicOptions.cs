@@ -2,8 +2,8 @@
 
 public interface ITopicWithSubscription
 {
-    ITopicWithSubscription AddSubscription(string name,
-                                           Action<CreateEmulatorSubscriptionOptions>? configure = default);
+    ITopicWithSubscription WithSubscription(string name,
+                                            Action<CreateEmulatorSubscriptionOptions>? configure = default);
 }
 
 public sealed class CreateEmulatorTopicOptions : ITopicWithSubscription
@@ -16,8 +16,8 @@ public sealed class CreateEmulatorTopicOptions : ITopicWithSubscription
 
     internal Dictionary<string, CreateEmulatorSubscriptionOptions> SubscriptionOptions { get; } = [];
 
-    public ITopicWithSubscription AddSubscription(string name,
-                                                  Action<CreateEmulatorSubscriptionOptions>? configure = default)
+    public ITopicWithSubscription WithSubscription(string name,
+                                                   Action<CreateEmulatorSubscriptionOptions>? configure = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 

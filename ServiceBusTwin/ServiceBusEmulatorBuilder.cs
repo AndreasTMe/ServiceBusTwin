@@ -1,8 +1,8 @@
 ﻿namespace ServiceBusTwin;
 
-public sealed class EmulatorBuilder
+public sealed class ServiceBusEmulatorBuilder
 {
-    private readonly EmulatorConfiguration _configuration = new()
+    private readonly ServiceBusEmulatorConfiguration _configuration = new()
     {
         ConfigurationFile = new ConfigurationFile
         {
@@ -25,52 +25,32 @@ public sealed class EmulatorBuilder
         }
     };
 
-    public EmulatorBuilder WithNetwork(string name)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        _configuration.NetworkName = name;
-        return this;
-    }
-
-    public EmulatorBuilder WithServiceBusEmulatorImage(string image)
+    public ServiceBusEmulatorBuilder WithServiceBusEmulatorImage(string image)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(image);
         _configuration.SbEmulatorImage = image;
         return this;
     }
 
-    public EmulatorBuilder WithServiceBusEmulatorName(string name)
+    public ServiceBusEmulatorBuilder WithServiceBusEmulatorName(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         _configuration.SbEmulatorName = name;
         return this;
     }
 
-    public EmulatorBuilder WithSqlServerImage(string image)
+    public ServiceBusEmulatorBuilder WithServiceBusEmulatorPort(int port)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(image);
-        _configuration.SqlServerImage = image;
+        ArgumentOutOfRangeException.ThrowIfLessThan(port, 1024, nameof(port));
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(port, 65535, nameof(port));
+        _configuration.SbEmulatorPort = port;
         return this;
     }
 
-    public EmulatorBuilder WithSqlServerName(string name)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        _configuration.SqlServerName = name;
-        return this;
-    }
-
-    public EmulatorBuilder WithSqlServerSaPassword(string password)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(password);
-        _configuration.SqlSaPassword = password;
-        return this;
-    }
-
-    public EmulatorBuilder WithQueue(Action<CreateEmulatorQueueOptions>? configure = default) =>
+    public ServiceBusEmulatorBuilder WithQueue(Action<CreateEmulatorQueueOptions>? configure = default) =>
         WithQueue("default", configure);
 
-    public EmulatorBuilder WithQueue(string name, Action<CreateEmulatorQueueOptions>? configure = default)
+    public ServiceBusEmulatorBuilder WithQueue(string name, Action<CreateEmulatorQueueOptions>? configure = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
@@ -84,10 +64,10 @@ public sealed class EmulatorBuilder
         return this;
     }
 
-    public EmulatorBuilder WithTopic(Action<CreateEmulatorTopicOptions>? configure = default) =>
+    public ServiceBusEmulatorBuilder WithTopic(Action<CreateEmulatorTopicOptions>? configure = default) =>
         WithTopic("default", configure);
 
-    public EmulatorBuilder WithTopic(string name, Action<CreateEmulatorTopicOptions>? configure = default)
+    public ServiceBusEmulatorBuilder WithTopic(string name, Action<CreateEmulatorTopicOptions>? configure = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
@@ -101,7 +81,7 @@ public sealed class EmulatorBuilder
         return this;
     }
 
-    public EmulatorBuilder WithLogging(EmulatorLogging logging)
+    public ServiceBusEmulatorBuilder WithLogging(EmulatorLogging logging)
     {
         _configuration.ConfigurationFile.UserConfig.Logging.Type = logging switch
         {
@@ -175,12 +155,11 @@ public sealed class EmulatorBuilder
             Name = kvp.Key,
             Properties = new RuleProperties
             {
-#pragma warning disable CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
                 FilterType = options.FilterType switch
-#pragma warning restore CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
                 {
                     RuleFilterType.Correlation => "Correlation",
-                    RuleFilterType.Sql         => "Sql"
+                    RuleFilterType.Sql         => throw new NotSupportedException("Sql filters not yet supported"),
+                    _                          => throw new ArgumentOutOfRangeException(nameof(options.FilterType))
                 },
                 CorrelationFilter = new CorrelationFilter
                 {

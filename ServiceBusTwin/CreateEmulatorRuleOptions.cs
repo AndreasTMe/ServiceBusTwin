@@ -6,7 +6,7 @@ public enum RuleFilterType
     Sql
 }
 
-public enum SystemProperties
+internal enum SystemProperties
 {
     ContentType,
     CorrelationId,
@@ -20,12 +20,26 @@ public enum SystemProperties
 
 public interface IRuleWithSystemPropertyFilter
 {
-    IRuleWithSystemPropertyFilter AddSystemPropertyFilter(SystemProperties properties, string value);
+    IRuleWithSystemPropertyFilter WithContentType(string value);
+
+    IRuleWithSystemPropertyFilter WithCorrelationId(string value);
+
+    IRuleWithSystemPropertyFilter WithLabel(string value);
+
+    IRuleWithSystemPropertyFilter WithMessageId(string value);
+
+    IRuleWithSystemPropertyFilter WithReplyTo(string value);
+
+    IRuleWithSystemPropertyFilter WithReplyToSessionId(string value);
+
+    IRuleWithSystemPropertyFilter WithSessionId(string value);
+
+    IRuleWithSystemPropertyFilter WithTo(string value);
 }
 
 public interface IRuleWithUserPropertyFilter
 {
-    IRuleWithUserPropertyFilter AddUserPropertyFilter(string key, string value);
+    IRuleWithUserPropertyFilter WithUserPropertyFilter(string key, string value);
 }
 
 public sealed class CreateEmulatorRuleOptions : IRuleWithSystemPropertyFilter, IRuleWithUserPropertyFilter
@@ -35,13 +49,55 @@ public sealed class CreateEmulatorRuleOptions : IRuleWithSystemPropertyFilter, I
     internal Dictionary<SystemProperties, string> SystemProperties { get; } = [];
     internal Dictionary<string, string>           UserProperties   { get; } = [];
 
-    public IRuleWithSystemPropertyFilter AddSystemPropertyFilter(SystemProperties properties, string value)
+    public IRuleWithSystemPropertyFilter WithContentType(string value)
     {
-        SystemProperties.TryAdd(properties, value);
+        SystemProperties.TryAdd(ServiceBusTwin.SystemProperties.ContentType, value);
         return this;
     }
 
-    public IRuleWithUserPropertyFilter AddUserPropertyFilter(string key, string value)
+    public IRuleWithSystemPropertyFilter WithCorrelationId(string value)
+    {
+        SystemProperties.TryAdd(ServiceBusTwin.SystemProperties.CorrelationId, value);
+        return this;
+    }
+
+    public IRuleWithSystemPropertyFilter WithLabel(string value)
+    {
+        SystemProperties.TryAdd(ServiceBusTwin.SystemProperties.Label, value);
+        return this;
+    }
+
+    public IRuleWithSystemPropertyFilter WithMessageId(string value)
+    {
+        SystemProperties.TryAdd(ServiceBusTwin.SystemProperties.MessageId, value);
+        return this;
+    }
+
+    public IRuleWithSystemPropertyFilter WithReplyTo(string value)
+    {
+        SystemProperties.TryAdd(ServiceBusTwin.SystemProperties.ReplyTo, value);
+        return this;
+    }
+
+    public IRuleWithSystemPropertyFilter WithReplyToSessionId(string value)
+    {
+        SystemProperties.TryAdd(ServiceBusTwin.SystemProperties.ReplyToSessionId, value);
+        return this;
+    }
+
+    public IRuleWithSystemPropertyFilter WithSessionId(string value)
+    {
+        SystemProperties.TryAdd(ServiceBusTwin.SystemProperties.SessionId, value);
+        return this;
+    }
+
+    public IRuleWithSystemPropertyFilter WithTo(string value)
+    {
+        SystemProperties.TryAdd(ServiceBusTwin.SystemProperties.To, value);
+        return this;
+    }
+
+    public IRuleWithUserPropertyFilter WithUserPropertyFilter(string key, string value)
     {
         UserProperties.TryAdd(key, value);
         return this;

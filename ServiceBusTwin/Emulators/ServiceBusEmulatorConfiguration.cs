@@ -1,6 +1,6 @@
-﻿namespace ServiceBusTwin;
+﻿namespace ServiceBusTwin.Emulators;
 
-public sealed class EmulatorConfiguration
+internal sealed class ServiceBusEmulatorConfiguration
 {
     public string NetworkName { get; internal set; } = "sb-emulator-network";
 
@@ -9,9 +9,11 @@ public sealed class EmulatorConfiguration
 
     public string SbEmulatorName { get; internal set; } = "sb-emulator";
 
+    public int SbEmulatorPort { get; internal set; } = 5672;
+
     public string SqlServerImage { get; internal set; } = "mcr.microsoft.com/mssql/server";
 
-    public string SqlServerName { get; internal set; } = "sb-database";
+    public string SqlServerName { get; internal set; } = "sb-backend";
 
     public string SqlSaPassword { get; internal set; } = "Password123!";
 

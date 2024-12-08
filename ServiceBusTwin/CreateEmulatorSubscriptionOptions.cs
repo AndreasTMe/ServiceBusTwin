@@ -2,7 +2,7 @@
 
 public interface ISubscriptionWithRuleOptions
 {
-    ISubscriptionWithRuleOptions AddRule(string name, Action<CreateEmulatorRuleOptions>? configure = default);
+    ISubscriptionWithRuleOptions WithRule(string name, Action<CreateEmulatorRuleOptions>? configure = default);
 }
 
 public sealed class CreateEmulatorSubscriptionOptions : ISubscriptionWithRuleOptions
@@ -23,7 +23,7 @@ public sealed class CreateEmulatorSubscriptionOptions : ISubscriptionWithRuleOpt
 
     internal Dictionary<string, CreateEmulatorRuleOptions>? RuleOptions { get; private set; }
 
-    public ISubscriptionWithRuleOptions AddRule(string name, Action<CreateEmulatorRuleOptions>? configure = default)
+    public ISubscriptionWithRuleOptions WithRule(string name, Action<CreateEmulatorRuleOptions>? configure = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
