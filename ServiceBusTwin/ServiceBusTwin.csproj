@@ -16,10 +16,4 @@
         <InternalsVisibleTo Include="$(AssemblyName).Tests"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <None Include="Schemas/**/*.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
 </Project>

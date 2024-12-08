@@ -78,8 +78,8 @@ public sealed class EmulatorBuilder
         configure?.Invoke(queueOptions);
 
         _configuration.ConfigurationFile.UserConfig.Namespaces[0]
-                      .Queues
-                      .Add(ParseQueueConfiguration(name, queueOptions));
+            .Queues
+            .Add(ParseQueueConfiguration(name, queueOptions));
 
         return this;
     }
@@ -95,8 +95,8 @@ public sealed class EmulatorBuilder
         configure?.Invoke(topicOptions);
 
         _configuration.ConfigurationFile.UserConfig.Namespaces[0]
-                      .Topics
-                      .Add(ParseTopicConfiguration(name, topicOptions));
+            .Topics
+            .Add(ParseTopicConfiguration(name, topicOptions));
 
         return this;
     }
@@ -163,7 +163,7 @@ public sealed class EmulatorBuilder
                 ForwardTo                        = options.ForwardTo,
                 RequiresSession                  = options.RequiresSession
             },
-            Rules = options.RuleOptions.Select(ParseRuleConfiguration).ToHashSet()
+            Rules = options.RuleOptions?.Select(ParseRuleConfiguration).ToHashSet() ?? null
         };
     }
 

@@ -6,7 +6,8 @@ internal sealed class SubscriptionConfiguration : IEqualityComparer<Subscription
 
     public required SubscriptionProperties Properties { get; set; }
 
-    public required ISet<RuleConfiguration> Rules { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public ISet<RuleConfiguration>? Rules { get; set; }
 
     public bool Equals(SubscriptionConfiguration? x, SubscriptionConfiguration? y)
     {

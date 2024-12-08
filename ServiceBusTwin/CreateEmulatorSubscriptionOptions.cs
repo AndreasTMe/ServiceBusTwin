@@ -1,6 +1,11 @@
 ﻿namespace ServiceBusTwin;
 
-public sealed class CreateEmulatorSubscriptionOptions
+public interface ISubscriptionWithRuleOptions
+{
+    ISubscriptionWithRuleOptions AddRule(string name, Action<CreateEmulatorRuleOptions>? configure = default);
+}
+
+public sealed class CreateEmulatorSubscriptionOptions : ISubscriptionWithRuleOptions
 {
     public bool DeadLetteringOnMessageExpiration { get; set; }
 
@@ -10,21 +15,24 @@ public sealed class CreateEmulatorSubscriptionOptions
 
     public int MaxDeliveryCount { get; set; } = 3;
 
-    public string? ForwardDeadLetteredMessagesTo { get; set; }
+    public string ForwardDeadLetteredMessagesTo { get; set; } = string.Empty;
 
-    public string? ForwardTo { get; set; }
+    public string ForwardTo { get; set; } = string.Empty;
 
     public bool RequiresSession { get; set; }
 
-    internal Dictionary<string, CreateEmulatorRuleOptions> RuleOptions { get; } = [];
+    internal Dictionary<string, CreateEmulatorRuleOptions>? RuleOptions { get; private set; }
 
-    public void AddRule(string name, Action<CreateEmulatorRuleOptions>? configure = default)
+    public ISubscriptionWithRuleOptions AddRule(string name, Action<CreateEmulatorRuleOptions>? configure = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
         var options = new CreateEmulatorRuleOptions();
         configure?.Invoke(options);
 
+        RuleOptions ??= new Dictionary<string, CreateEmulatorRuleOptions>();
         RuleOptions.TryAdd(name, options);
+
+        return this;
     }
 }

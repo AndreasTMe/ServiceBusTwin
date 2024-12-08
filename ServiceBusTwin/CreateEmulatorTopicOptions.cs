@@ -1,6 +1,12 @@
 ﻿namespace ServiceBusTwin;
 
-public sealed class CreateEmulatorTopicOptions
+public interface ITopicWithSubscription
+{
+    ITopicWithSubscription AddSubscription(string name,
+                                           Action<CreateEmulatorSubscriptionOptions>? configure = default);
+}
+
+public sealed class CreateEmulatorTopicOptions : ITopicWithSubscription
 {
     public TimeSpan DefaultMessageTimeToLive { get; set; } = TimeSpan.FromHours(1);
 
@@ -10,7 +16,8 @@ public sealed class CreateEmulatorTopicOptions
 
     internal Dictionary<string, CreateEmulatorSubscriptionOptions> SubscriptionOptions { get; } = [];
 
-    public void AddSubscription(string name, Action<CreateEmulatorSubscriptionOptions>? configure = default)
+    public ITopicWithSubscription AddSubscription(string name,
+                                                  Action<CreateEmulatorSubscriptionOptions>? configure = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
@@ -18,5 +25,6 @@ public sealed class CreateEmulatorTopicOptions
         configure?.Invoke(options);
 
         SubscriptionOptions.TryAdd(name, options);
+        return this;
     }
 }

@@ -8,9 +8,9 @@ public sealed class CreateEmulatorQueueOptions
 
     public TimeSpan DuplicateDetectionHistoryTimeWindow { get; set; } = TimeSpan.FromSeconds(20);
 
-    public string? ForwardDeadLetteredMessagesTo { get; set; }
+    public string ForwardDeadLetteredMessagesTo { get; set; } = string.Empty;
 
-    public string? ForwardTo { get; set; }
+    public string ForwardTo { get; set; } = string.Empty;
 
     public TimeSpan LockDuration { get; set; } = TimeSpan.FromMinutes(1);
 
